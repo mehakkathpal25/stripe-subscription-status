@@ -1,5 +1,8 @@
 import express from 'express';
 import pkg from 'mongodb';
+import router from './routes/userRoutes.ts';
+import authRouter from './routes/authRoutes.ts';
+
 
 const { MongoClient, ServerApiVersion } = pkg;
 
@@ -10,7 +13,8 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: false,
     deprecationErrors: true,
-  }
+  },
+  tlsInsecure: true
 });
 
 app.get('/', (req, res) => {
@@ -32,10 +36,12 @@ app.get('/hello',(req,res) => {
   res.send('<h1> hello from the backend </h1>');
 })
 
-
-app.listen(3000,(error)=>{
+app.use(express.json());
+app.use('/users',router);
+app.use('/auth', authRouter);
+app.listen(4000,(error)=>{
   if(!error){
-    console.log('Server is running on port 3000');
+    console.log('Server is running on port 4000');
   }
   else {
     console.log('Error occurred: ', error);
