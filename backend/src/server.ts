@@ -2,7 +2,7 @@ import express from 'express';
 import pkg from 'mongodb';
 import router from './routes/userRoutes.ts';
 import authRouter from './routes/authRoutes.ts';
-
+import cookieParser from "cookie-parser";
 
 const { MongoClient, ServerApiVersion } = pkg;
 
@@ -16,6 +16,8 @@ const client = new MongoClient(uri, {
   },
   tlsInsecure: true
 });
+
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('hello world');
@@ -31,11 +33,6 @@ async function connectToDB() {
   }
 }
 await connectToDB();
-  
-app.get('/hello',(req,res) => {
-  res.send('<h1> hello from the backend </h1>');
-})
-
 app.use(express.json());
 app.use('/users',router);
 app.use('/auth', authRouter);

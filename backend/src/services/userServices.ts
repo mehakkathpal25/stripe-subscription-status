@@ -4,16 +4,6 @@ import bcrypt from 'bcrypt';
 
 const db = client.db('stripe-info-data')
 
-export const createUser = async (data: createUserInput) => {
-        const existing = await db.collection('users').findOne({ email: data.email });
-        if (existing) {
-            throw new Error("user already exists");
-        }
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-        await db.collection('users').insertOne({ ...data, password: hashedPassword });
-        return { message: "user created successfully" };
-}
-
 export const getUsers = async () => {
         const users = await db.collection('users').find({}, { projection: { password: 0 } }).toArray();
         return users;

@@ -2,17 +2,6 @@ import express from 'express';
 import { createUserSchema } from '../schema/user.schema.ts';
 import * as authService from '../services/userServices.ts'; 
 
-export const createUser = async (req: express.Request, res: express.Response) => {
-    try {
-        const data = createUserSchema.parse(req.body);
-        const result = await authService.createUser(data);
-        if(result) {
-            return res.status(201).json(result);
-        }
-    }catch (error) {
-        return res.status(500).json({error: (error as Error).message || "Internal server error"});
-    } 
-}  
 
 export const getUsers = async (req: express.Request, res: express.Response) => {
     try{
